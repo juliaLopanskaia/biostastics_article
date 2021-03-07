@@ -1,12 +1,12 @@
 %% simulation to understand biostatistics
 clear
-N_per_day=20; 
+N_per_day=5; 
 N_days=5;
 
-true_exp_mean=0.8;
+true_exp_mean=1;
 true_control_mean=1;
 
-inter_day_SD=0.1; %um/s
+inter_day_SD=0.6; %um/s
 sigma=0.5; %intra_day_SD;
 
 mean_exp=true_exp_mean+inter_day_SD*randn(1,N_days);
