@@ -3,12 +3,12 @@ Biological experiments often include data with intrinsic hierachy. For example, 
 
 We designed a simple data simulator that helps an experimentator quickly generate data and learn how the results of the experiment depend on the construction of the experiment, data intrinsic features and even data processing. There are several parameters in this code:
 * (intrinsic data features) 
-1. true values
-2. the variance of inter-cluster data (cluster-to-cluster variance)
-3. the variance of intra-cluster data (experiment-to-experiment variance inside a cluster)
+	1. true values
+	2. the variance of inter-cluster data (cluster-to-cluster variance)
+	3. the variance of intra-cluster data (experiment-to-experiment variance inside a cluster)
 * (features of experiment consrtuction) 
-1. The number of clusters 
-2. The number of per cluster experiments 
+	* 1. The number of clusters 
+	* 2. The number of per cluster experiments 
 * (the choice of data processing type) 
 1. p-values calculation based on pooled data (ignorence of data hierachy)
 2. p-values calculation based on clusters 
