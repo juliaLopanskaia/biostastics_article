@@ -9,8 +9,8 @@ This is a simple experiment simulator (it generates experimental data and proces
 Using this tool we have highlighted some commonly arising mistakes with data analysis and proposed a workflow, in which our simulator could be employed to correctly compare two nested groups of experimental data and to optimally plan new experiments in order to increase statistical power if it is necessary. See our article ' Avoiding common problems with statistical analysis of biological experiments using a simple nested data simulator' (not published yet).
 
 ## Documentation
-[Methods](https://github.com/juliaLopanskaia/biostastics_article/blob/master/docs/methods.md)
+[Parameters]
 <br/>
-Parameters
+[Methods](https://github.com/juliaLopanskaia/biostastics_article/blob/master/docs/methods.md)
 <br/>
 [Tutorial](https://github.com/juliaLopanskaia/biostastics_article/blob/master/docs/tutorial.md)
