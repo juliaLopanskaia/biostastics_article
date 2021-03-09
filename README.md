@@ -10,5 +10,7 @@ Using this tool we have highlighted some commonly arising mistakes with data ana
 
 ## Documentation
 [Methods](https://github.com/juliaLopanskaia/biostastics_article/blob/master/docs/methods.md)
-<br/><br/>
+<br/>
+Parameters
+<br/>
 [Tutorial](https://github.com/juliaLopanskaia/biostastics_article/blob/master/docs/tutorial.md)
