@@ -10,8 +10,8 @@ We designed a simple data simulator that helps an experimentator quickly generat
 	* 1. The number of clusters 
 	* 2. The number of per cluster experiments 
 * (the choice of data processing type) 
-1. p-values calculation based on pooled data (ignorence of data hierachy)
-2. p-values calculation based on clusters 
-3. adjusted p-values calculation 
+	* p-values calculation based on pooled data (ignorence of data hierachy)
+	* p-values calculation based on clusters 
+	* adjusted p-values calculation 
 		
 For more information read [Methods](https://github.com/juliaLopanskaia/biostastics_article/blob/master/docs/methods.md)
