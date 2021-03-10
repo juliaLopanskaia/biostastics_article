@@ -1,8 +1,11 @@
 from scipy.stats import ttest_ind as ttest
-from numpy import *
 import sys
 sys.path.insert(0, '..') # find package 'experiment_simulator' in the previous directory
 from experiment_simulator import *
+#from experiment_simulator.display_data import display_data
+from numpy import *
+
+
 
 import ipdb
 
@@ -52,7 +55,11 @@ def experiment(true_exp_mean:float, true_control_mean:float, inter_day_SD:float,
             print('can\'t do adjusted t-test on means of clusters. Need pooled data')
             return
     # display data
-    if show_figure:
-        display_data(data_exp, data_control, N_clusters, N_per_cluster)
+    #ipdb.set_trace()
+    #if show_figure:
+        #maxim()
+    #    display_data(data_exp, data_control, N_clusters, N_per_cluster)
 
     return t, p_value
+
+#experiment(1,1,0.2,0.1,3,4,'pool',True, True)

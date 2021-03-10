@@ -9,10 +9,8 @@ def generate_data(true_mean:float, inter_day_SD:float, intra_day_SD:float, N_clu
     experiment-to-experiment variability (inside a cluster), the number of
     clusters, the number of experiments per cluster
 
-    OUTPUT: 1) data - matrix of data (0 axis is experimental values per cluster;
-    1 axis is clusters)
-            2) mean_cluster - mean values of data per cluster
-            3) data_pooled - pooled data (matrix of data -> list of values) """
+    OUTPUT: data - matrix of data (0 axis is experimental values per cluster;
+    1 axis is clusters) """
     # generate matrix with clusters and experiments per cluster
     data = true_mean + inter_day_SD*np.random.randn(1,N_clusters) + intra_day_SD*np.random.randn(N_per_cluster,N_clusters);
     # calculate mean values of clusters (per cluster means)
