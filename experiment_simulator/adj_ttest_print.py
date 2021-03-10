@@ -2,7 +2,7 @@ import numpy as np
 from scipy.stats import t as tpdf
 from math import *
 
-def correct_p_value(N_per_cluster, N_clusters, inter_day_SD, intra_day_SD, data_exp_pooled, data_control_pooled):
+def adj_ttest_print(N_per_cluster, N_clusters, inter_day_SD, intra_day_SD, data_exp_pooled, data_control_pooled):
     N=N_per_cluster*N_clusters # total number of experiments
     ICC = inter_day_SD**2/(inter_day_SD**2 + intra_day_SD**2); # intraclass correlation calculation
     c = sqrt(((N - 2) - 2*(N_per_cluster-1)*ICC)/((N-2)*(1+(N_per_cluster-1)*ICC))) # correction factor for t-distribution     FIXME rename as items

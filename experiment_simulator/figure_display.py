@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from math import *
 
-def figure_generate(N_per_cluster, N_clusters, data_exp, mean_exp, data_control, mean_control):
+def figure_display(N_per_cluster, N_clusters, data_exp, mean_exp, data_control, mean_control):
     fig, ax = plt.subplots()
     fig = plt.plot(np.ones((N_per_cluster,1))+0.05/sqrt(N_clusters)*np.random.randn(N_per_cluster,1), data_exp,'.',markersize=6)
 

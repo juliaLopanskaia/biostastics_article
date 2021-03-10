@@ -1,6 +1,7 @@
 # Methods
 
-![picture_methods.png](../images/picture_methods.png)
+![picture_methods1.png](../images/picture_methods1.png)
+![picture_methods2.png](../images/picture_methods2.png)
 <br/>
 FIXME - wrong picture
 <br/><br/><br/>
