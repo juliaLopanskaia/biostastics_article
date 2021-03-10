@@ -6,6 +6,7 @@
 
 #__all__ = ['generate_data', 'ttest_print', 'figure_generate', 'correct_p_value']
 from experiment_simulator.generate_data import generate_data
-from experiment_simulator.figure_display import figure_display
-from experiment_simulator.ttest_print import ttest_print
-from experiment_simulator.adj_ttest_print import adj_ttest_print
+from experiment_simulator.display_data import display_data
+#from experiment_simulator.ttest_print import ttest_print
+from experiment_simulator.adj_ttest import adj_ttest
+from experiment_simulator.experiment import experiment
