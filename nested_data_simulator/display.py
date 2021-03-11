@@ -1,16 +1,9 @@
-#from numpy import *
-#import sys
-#sys.path.insert(0, '..') # find package 'experiment_simulator' in the previous directory
-#from experiment_simulator import *
 import numpy as np
 from math import *
 import matplotlib.pyplot as plt
+import seaborn as sns; sns.set_theme()
 
-import ipdb
-
-
-ipdb.set_trace()
-def display_data1(data_exp, data_control, N_clusters:int, N_per_cluster:int):
+def display_data(data_exp, data_control, N_clusters:int, N_per_cluster:int):
     """ display data (all experiments and means per clusters)
 
     INPUT: experimental data (matrix) & control data (matrix)
@@ -39,24 +32,24 @@ def display_data1(data_exp, data_control, N_clusters:int, N_per_cluster:int):
     ax.set_xlim(0,3)
     plt.show()
 
-#data_exp = np.matrix([[1, 1.1], [1.2, 1.3]])
-#data_control = np.matrix([[1, 1.1], [1.2, 1.3]])
-#display_data(data_exp, data_control, 2, 2)
-
-def test():
-    #data = generate_data(1, 0.1, 0.1, 3, 5)
-    #mean_cluster = data.mean(axis=0);
-    #data = data.reshape(-1).tolist()
-    #print(data)
-    #print(data_pooled)
-    #print(mean_cluster)
-    #t, p_value = experiment(1, 1, 0.01, 0.02, 3, 50, 'pool', True, True)
-    #print(t, p_value)
-    data_exp = np.matrix([[1, 1.1], [1.2, 1.3]])
-    print(data_exp)
-    data_control = np.matrix([[1, 1.1], [1.2, 1.3]])
-    display_data1(data_exp, data_control, 2, 2)
 
 
+def display_heatmap(probability, MAX_N_clusters, MAX_N_per_cluster):
+    """ INPUT: probability is a matrix
+        OUTPUT: heatmap figure """
+    CLUSTERS = np.array([i for i in range(1,MAX_N_clusters)])
+    PER_CLUSTER = np.array([i for i in range(1,MAX_N_per_cluster)])
+    ax = sns.heatmap(probability.T, xticklabels = CLUSTERS, yticklabels = PER_CLUSTER)
+    ax.invert_yaxis()
+    plt.xlabel('number of clusters')
+    plt.ylabel('number of measurements')
+    #plt.title('All')
+    plt.show()
 
-test()
+
+def display_graph(probability, ICC):
+    fig, ax = plt.subplots()
+    ax.scatter(ICC, probability, label='All')
+    ax.legend()
+    plt.xlabel('ICC')
+    plt.show()

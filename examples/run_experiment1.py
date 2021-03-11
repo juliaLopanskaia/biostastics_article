@@ -5,7 +5,7 @@ from nested_data_simulator import *
 import numpy as np
 from parameters1 import *
 
-def test(show_figure:bool=True):
+def test(show_figure:bool=True)
 # generate a matrix of measured values in experiment
     data_exp = generate_data(true_exp_mean, inter_day_SD, intra_day_SD, N_clusters, N_per_cluster)
     data_control = generate_data(true_control_mean, inter_day_SD, intra_day_SD, N_clusters, N_per_cluster)
