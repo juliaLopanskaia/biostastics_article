@@ -1,7 +1,7 @@
 #from numpy import *
-import sys
-sys.path.insert(0, '..') # find package 'experiment_simulator' in the previous directory
-from experiment_simulator import *
+#import sys
+#sys.path.insert(0, '..') # find package 'experiment_simulator' in the previous directory
+#from experiment_simulator import *
 import numpy as np
 from math import *
 import matplotlib.pyplot as plt
@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import ipdb
 
 
-
+ipdb.set_trace()
 def display_data1(data_exp, data_control, N_clusters:int, N_per_cluster:int):
     """ display data (all experiments and means per clusters)
 
@@ -43,11 +43,6 @@ def display_data1(data_exp, data_control, N_clusters:int, N_per_cluster:int):
 #data_control = np.matrix([[1, 1.1], [1.2, 1.3]])
 #display_data(data_exp, data_control, 2, 2)
 
-
-#data_exp = np.matrix([[1, 1.1], [1.2, 1.3]])
-#data_control = np.matrix([[1, 1.1], [1.2, 1.3]])
-#display_data1(data_exp, data_control, 2, 2)
-
 def test():
     #data = generate_data(1, 0.1, 0.1, 3, 5)
     #mean_cluster = data.mean(axis=0);
@@ -55,8 +50,12 @@ def test():
     #print(data)
     #print(data_pooled)
     #print(mean_cluster)
-    t, p_value = experiment(1, 1, 0.01, 0.02, 3, 50, 'pool', True, True)
-    print(t, p_value)
+    #t, p_value = experiment(1, 1, 0.01, 0.02, 3, 50, 'pool', True, True)
+    #print(t, p_value)
+    data_exp = np.matrix([[1, 1.1], [1.2, 1.3]])
+    print(data_exp)
+    data_control = np.matrix([[1, 1.1], [1.2, 1.3]])
+    display_data1(data_exp, data_control, 2, 2)
 
 
 
