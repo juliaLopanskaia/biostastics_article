@@ -1,16 +1,12 @@
-from scipy.stats import ttest_ind as ttest
 import sys
 sys.path.insert(0, '..') # find package 'experiment_simulator' in the previous directory
-from experiment_simulator import *
-#from experiment_simulator.display_data import display_data
-from numpy import *
+from nested_data_simulator import *
+#from nested_data_simulator.display_data import display_data
+#from numpy import *
+from scipy.stats import ttest_ind as ttest
+from parameters1 import *
 
-
-
-import ipdb
-
-
-def experiment(true_exp_mean:float, true_control_mean:float, inter_day_SD:float, intra_day_SD:float, N_clusters:int, N_per_cluster:int, data_method:str = 'pool', ttest_method:bool = True, show_figure:bool = False):
+def experiment(true_exp_mean:float, true_control_mean:float, inter_day_SD:float, intra_day_SD:float, N_clusters:int, N_per_cluster:int, data_method:str = 'pool', ttest_method:bool = True, show_figure:bool = True):
     """ This module generates data and does the processing
         There are several types of processing
         By default it is use simple t-test on pooled data (ignore clustering)
@@ -56,10 +52,13 @@ def experiment(true_exp_mean:float, true_control_mean:float, inter_day_SD:float,
             return
     # display data
     #ipdb.set_trace()
-    #if show_figure:
+    if show_figure:
         #maxim()
-    #    display_data(data_exp, data_control, N_clusters, N_per_cluster)
+        mean_exp = data_exp.mean(axis=0)
+        mean_control = data_control.mean(axis=0)
+        #figure_display(N_clusters, N_per_cluster, data_exp, mean_exp, data_control, mean_control)
+        display_data(data_exp, data_control, N_clusters, N_per_cluster)
 
     return t, p_value
 
-#experiment(1,1,0.2,0.1,3,4,'pool',True, True)
+experiment(true_exp_mean, true_control_mean, inter_day_SD, intra_day_SD, N_clusters, N_per_cluster)

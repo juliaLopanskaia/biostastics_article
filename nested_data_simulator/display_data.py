@@ -2,10 +2,6 @@ import numpy as np
 from math import *
 import matplotlib.pyplot as plt
 
-import ipdb
-
-
-
 def display_data(data_exp, data_control, N_clusters:int, N_per_cluster:int):
     """ display data (all experiments and means per clusters)
 
@@ -34,7 +30,3 @@ def display_data(data_exp, data_control, N_clusters:int, N_per_cluster:int):
 
     ax.set_xlim(0,3)
     plt.show()
-
-data_exp = np.matrix([[1, 1.1], [1.2, 1.3]])
-data_control = np.matrix([[1, 1.1], [1.2, 1.3]])
-display_data(data_exp, data_control, 2, 2)
