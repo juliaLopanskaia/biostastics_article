@@ -2,6 +2,7 @@ import numpy as np
 from math import *
 import matplotlib.pyplot as plt
 import seaborn as sns; sns.set_theme()
+import matplotlib.ticker as ticker
 
 def display_data(data_exp, data_control, N_clusters:int, N_per_cluster:int):
     """ display data (all experiments and means per clusters)
@@ -52,4 +53,19 @@ def display_graph(probability, ICC):
     ax.scatter(ICC, probability, label='All')
     ax.legend()
     plt.xlabel('ICC')
+    #  Устанавливаем интервал основных делений:
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(0.1))
+    #  Устанавливаем интервал вспомогательных делений:
+    ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.05))
+
+    #  Тоже самое проделываем с делениями на оси "y":
+    ax.yaxis.set_major_locator(ticker.MultipleLocator(0.1))
+    ax.yaxis.set_minor_locator(ticker.MultipleLocator(0.05))
+    ax.patch.set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.xaxis.set_ticks_position('bottom')
+    ax.yaxis.set_ticks_position('left')
+    plt.xlabel('ICC')
+    plt.ylabel('Probability of error')
     plt.show()

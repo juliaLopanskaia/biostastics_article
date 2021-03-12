@@ -27,17 +27,34 @@ def generate_data(true_value:float, inter_day_SD:float, intra_day_SD:float, \
 def adj_ttest(N_per_cluster:int, N_clusters:int, inter_day_SD:float, \
               intra_day_SD:float, data_exp_pooled:list, \
               data_control_pooled:list):
-    N = N_per_cluster*N_clusters # total number of experiments
-    ICC = inter_day_SD**2/(inter_day_SD**2 + intra_day_SD**2); # intraclass correlation calculation
-    c = sqrt(((N - 2) - 2*(N_per_cluster-1)*ICC)/((N-2)*(1+(N_per_cluster-1)*ICC))) # correction factor for t-distribution     FIXME rename as items
-    df = ((N-2)-2*(N_per_cluster-1)*ICC)**2/((N-2)*(1-ICC)**2+N_per_cluster-1*(N-2*N_per_cluster-1)*ICC+2*(N-2*N_per_cluster)*ICC*(1-ICC)) # corrected degrees of freedom
-    s = sqrt(((N-1)*np.std(data_exp_pooled)**2+(N-1)*np.std(data_control_pooled)**2)/(2*N-2)) # standard deviation of two datasets
+    N = N_per_cluster*N_clusters # the total number of experiments
+    # calculate intraclass correlation calculation:
+    ICC = inter_day_SD**2/(inter_day_SD**2 + intra_day_SD**2);
+
+    #item1 = (N_per_cluster - 1)*ICC
+    #item2 = (N - 2) - 2*item1
+    #item3 = (N - 2)*(1 + item1)
+    #c = sqrt(item2/item3) # correction factor for t-distribution
+    c=np.sqrt(((N-2)-2*(N_per_cluster-1)*ICC)/((N-2)*(1+(N_per_cluster-1)*ICC)))
+
+    #item4 = N-2*N_per_cluster
+    #item5 = (N-2)*(1-ICC)**2
+    #item6 = N_per_cluster*item4*ICC**2
+    #item7 = 2*item4*ICC*(1 - ICC)
+    #h = item2**2/(item5 + item6 + item7) # corrected degrees of freedom
+    h = ((N-2)-2*(N_per_day-1)*ICC)**2/((N-2)*(1-ICC)**2 + N_per_day*(N-2*N_per_day)*(ICC**2)+2*(N-2*N_per_day)*ICC*(1-ICC))
+
+    s=np.sqrt((N*day_exp_pooled.std()**2+N*day_control_pooled.std()**2)/(2*N-2))
+    #s = sqrt(((N-1)*np.std(data_exp_pooled)**2+(N-1)*np.std(data_control_pooled)**2)/(2*N-2)) # standard deviation of two datasets
     t = abs(np.mean(data_exp_pooled) - np.mean(data_control_pooled))/(s*sqrt(1/N + 1/N)) # t-test
     ta = c*t # corrected t-test
-    p_value = 2*sum(tpdf.pdf(np.arange(ta,100,0.001),df)*0.001) # p-value = integral of t-distribution probability function
+    #p_value = 2*sum(tpdf.pdf(np.arange(ta,100,0.001),h)*0.001) # p-value = integral of t-distribution probability function
+    p_value = 2*(1-tpdf.cdf(ta, h))
     #print('P-value based on t-distribution probability function is {:2.2f}'.format(p_value))
-    h = 1 # FIXME
-    return h, p_value
+    return ta, p_value
+
+
+
 
 
 
@@ -105,8 +122,8 @@ def experiment(true_exp_value:float, true_control_value:float, \
     # generate 2 matrices of data (control and experiment)
     data_exp = generate_data(true_exp_value, inter_day_SD, intra_day_SD, \
                              N_clusters, N_per_cluster)
-    data_control = generate_data(true_control_value, inter_day_SD, intra_day_SD,\
-                                 N_clusters, N_per_cluster)
+    data_control = generate_data(true_control_value, inter_day_SD, \
+                                 intra_day_SD, N_clusters, N_per_cluster)
     # do the processing
     p_value = process_data(data_exp, data_control, N_per_cluster, \
                                 N_clusters, inter_day_SD, intra_day_SD, \
@@ -141,7 +158,7 @@ def error_probability(NN:int, true_exp_value:float, true_control_value:float, \
     # do NN experiments and see how many times we have an error
     N_error = 0
     for i in range(NN):
-        p_value = experiment(true_exp_value, true_control_value, inter_day_SD, \
+        p_value = experiment(true_exp_value, true_control_value, inter_day_SD,\
                              intra_day_SD, N_clusters, N_per_cluster, \
                              data_method, ttest_method)
         if s*p_value < s*0.05 :
