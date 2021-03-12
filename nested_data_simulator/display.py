@@ -15,7 +15,7 @@ def display_data(data_exp, data_control, N_clusters:int, N_per_cluster:int):
     data_exp_mean = data_exp.mean(axis=0)
     data_control_mean = data_control.mean(axis=0)
     fig, ax = plt.subplots()
-    fig = plt.plot(np.ones((N_per_cluster,1))+0.05/sqrt(N_clusters)*np.random.randn(N_per_cluster,1), data_exp,'.',markersize=6)
+    fig = plt.plot(np.ones((N_per_cluster,1))+0.05/np.sqrt(N_clusters)*np.random.randn(N_per_cluster,1), data_exp,'.',markersize=6)
 
     colord = []
     for i in range(len(fig)):
@@ -24,7 +24,7 @@ def display_data(data_exp, data_control, N_clusters:int, N_per_cluster:int):
 
     plt.scatter(np.ones(N_clusters), data_exp_mean, 1000, col,'+',lineWidths=3)
 
-    arr_control=2*np.ones((N_per_cluster,1))+0.05/sqrt(N_clusters)*np.random.randn(N_per_cluster,1)
+    arr_control=2*np.ones((N_per_cluster,1))+0.05/np.sqrt(N_clusters)*np.random.randn(N_per_cluster,1)
     for i in range(N_per_cluster):
         for j in range(N_clusters):
             plt.plot(arr_control[i], data_control[i][j],'.',markersize=6,color=col[j])
@@ -35,12 +35,15 @@ def display_data(data_exp, data_control, N_clusters:int, N_per_cluster:int):
 
 
 
-def display_heatmap(probability, MAX_N_clusters, MAX_N_per_cluster):
+def display_heatmap(probability, MAX_N_clusters, MAX_N_per_cluster, scaleMax=1):
     """ INPUT: probability is a matrix
+        scaleMax - the limitation of heatmap scale (optional, use if you want
+        to compare several figures)
+
         OUTPUT: heatmap figure """
-    CLUSTERS = np.array([i for i in range(1,MAX_N_clusters)])
-    PER_CLUSTER = np.array([i for i in range(1,MAX_N_per_cluster)])
-    ax = sns.heatmap(probability.T, xticklabels = CLUSTERS, yticklabels = PER_CLUSTER)
+    CLUSTERS = np.array([i for i in range(2,MAX_N_clusters+1)])
+    PER_CLUSTER = np.array([i for i in range(2,MAX_N_per_cluster+1)])
+    ax = sns.heatmap(probability.T, xticklabels = CLUSTERS, yticklabels = PER_CLUSTER, vmin = 0, vmax = scaleMax)
     ax.invert_yaxis()
     plt.xlabel('number of clusters')
     plt.ylabel('number of measurements')
@@ -48,16 +51,16 @@ def display_heatmap(probability, MAX_N_clusters, MAX_N_per_cluster):
     plt.show()
 
 
-def display_graph(probability, ICC):
+def display_graph(probability, ICC, label):
     fig, ax = plt.subplots()
-    ax.scatter(ICC, probability, label='All')
+    for i in range(len(probability[:,1])):
+        ax.scatter(ICC, probability[i,:], label = label[i])
     ax.legend()
     plt.xlabel('ICC')
     #  Устанавливаем интервал основных делений:
     ax.xaxis.set_major_locator(ticker.MultipleLocator(0.1))
     #  Устанавливаем интервал вспомогательных делений:
     ax.xaxis.set_minor_locator(ticker.MultipleLocator(0.05))
-
     #  Тоже самое проделываем с делениями на оси "y":
     ax.yaxis.set_major_locator(ticker.MultipleLocator(0.1))
     ax.yaxis.set_minor_locator(ticker.MultipleLocator(0.05))

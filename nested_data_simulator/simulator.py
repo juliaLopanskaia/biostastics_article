@@ -42,11 +42,11 @@ def adj_ttest(N_per_cluster:int, N_clusters:int, inter_day_SD:float, \
     #item6 = N_per_cluster*item4*ICC**2
     #item7 = 2*item4*ICC*(1 - ICC)
     #h = item2**2/(item5 + item6 + item7) # corrected degrees of freedom
-    h = ((N-2)-2*(N_per_day-1)*ICC)**2/((N-2)*(1-ICC)**2 + N_per_day*(N-2*N_per_day)*(ICC**2)+2*(N-2*N_per_day)*ICC*(1-ICC))
+    h = ((N-2)-2*(N_per_cluster-1)*ICC)**2/((N-2)*(1-ICC)**2 + N_per_cluster*(N-2*N_per_cluster)*(ICC**2)+2*(N-2*N_per_cluster)*ICC*(1-ICC))
 
-    s=np.sqrt((N*day_exp_pooled.std()**2+N*day_control_pooled.std()**2)/(2*N-2))
+    s=np.sqrt((N*data_exp_pooled.std()**2+N*data_control_pooled.std()**2)/(2*N-2))
     #s = sqrt(((N-1)*np.std(data_exp_pooled)**2+(N-1)*np.std(data_control_pooled)**2)/(2*N-2)) # standard deviation of two datasets
-    t = abs(np.mean(data_exp_pooled) - np.mean(data_control_pooled))/(s*sqrt(1/N + 1/N)) # t-test
+    t = abs(np.mean(data_exp_pooled) - np.mean(data_control_pooled))/(s*np.sqrt(1/N + 1/N)) # t-test
     ta = c*t # corrected t-test
     #p_value = 2*sum(tpdf.pdf(np.arange(ta,100,0.001),h)*0.001) # p-value = integral of t-distribution probability function
     p_value = 2*(1-tpdf.cdf(ta, h))
@@ -74,8 +74,8 @@ def process_data(data_exp, data_control, N_per_cluster, N_clusters, \
 
     if data_method == 'pool': # use pooled data for processing
         # pool the data into a list:
-        data_exp_pooled = data_exp.reshape(-1).tolist()
-        data_control_pooled = data_control.reshape(-1).tolist()
+        data_exp_pooled = data_exp.reshape(-1)
+        data_control_pooled = data_control.reshape(-1)
         #print(data_exp, data_control)
         if ttest_method == 'simple':
             # use simple t-test
@@ -128,9 +128,6 @@ def experiment(true_exp_value:float, true_control_value:float, \
     p_value = process_data(data_exp, data_control, N_per_cluster, \
                                 N_clusters, inter_day_SD, intra_day_SD, \
                                 data_method, ttest_method)
-    # visualize data
-    #if show_figure:
-        #display_data(data_exp, data_control, N_clusters, N_per_cluster)
     return p_value
 
 
@@ -171,8 +168,7 @@ def error_probability(NN:int, true_exp_value:float, true_control_value:float, \
 def error_probability_heatmap(MAX_N_clusters:int, MAX_N_per_cluster:int, \
                               NN:int, true_exp_value:float, \
                               true_control_value:float, inter_day_SD:float, \
-                              intra_day_SD:float, N_clusters:int, \
-                              N_per_cluster:int, data_method:str='pool', \
+                              intra_day_SD:float, data_method:str='pool', \
                               ttest_method:str='simple'):
     """ Heatmap will show the error probability for an experimentator's choise
     of number of clusters and number of measurements per cluster
@@ -183,26 +179,25 @@ def error_probability_heatmap(MAX_N_clusters:int, MAX_N_per_cluster:int, \
 
     OUTPUT: a matrix of probability with axis that correspond to the number
             of clusters and the number od measurements per cluster  """
-    CLUSTERS = np.array([i for i in range(1,MAX_N_clusters)])
-    PER_CLUSTER = np.array([i for i in range(1,MAX_N_per_cluster)])
+    CLUSTERS = np.array([i for i in range(2,MAX_N_clusters+1)])
+    PER_CLUSTER = np.array([i for i in range(2,MAX_N_per_cluster+1)])
 
     probability = np.zeros((MAX_N_clusters-1, MAX_N_per_cluster-1))
     for i, n_clusters in enumerate(CLUSTERS):
         for j, n_per_cluster in enumerate(PER_CLUSTER):
-            probability[i, j] = error_probability(NN, true_exp_value, \
+            probability[i, j] = error_probability(NN,true_exp_value, \
             true_control_value, inter_day_SD, intra_day_SD, n_clusters, \
             n_per_cluster, data_method, ttest_method)
     return probability
-    #display_heatmap(probability, CLUSTERS, PER_CLUSTER)
 
 
 
 
 def error_probability_ICC(NN:int, true_exp_value:float, \
-                          true_control_value:float, inter_day_SD:float, \
+                          true_control_value:float, \
                           intra_day_SD:float, N_clusters:int, \
-                          N_per_cluster:int, data_method:str='pool', \
-                          ttest_method:str='simple'):
+                          N_per_cluster:int, ICC, \
+                          data_method:str='pool', ttest_method:str='simple'):
     """ Let's calculate the probability of erroneus result in dependence of ICC
     For this we make the intra_cluster_SD constant and vary inter_cluster_SD
     Then call the function that calculates the probability of error for a
@@ -212,16 +207,13 @@ def error_probability_ICC(NN:int, true_exp_value:float, \
 
     OUTPUT: a list of error probability for different ICC & ICC """
 
-    ICC = np.array([0.0, 0.01, 0.03, 0.07, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, \
-                    0.4, 0.45, 0.5])
     inter_day_SDs = np.sqrt(ICC*(intra_day_SD**2)/(1-ICC))
 
     probability = np.zeros((len(ICC)))
-    for i, icc in enumerate(ICC):
+    for i in range(len(ICC)):
         probability[i] = error_probability(NN, true_exp_value, \
                                            true_control_value, inter_day_SDs[i],\
                                            intra_day_SD, N_clusters, \
                                            N_per_cluster, data_method,\
                                            ttest_method)
-    return probability, ICC
-    #display_graph(probability, ICC)
+    return probability
