@@ -5,7 +5,7 @@ from math import *
 
 
 
-def generate_data(true_value:float, inter_day_SD:float, intra_day_SD:float, \
+def generate_data(true_value:float, inter_cluster_SD:float, intra_cluster_SD:float, \
                   N_clusters:int, N_per_cluster:int):
     """ This function generates data. It randomly calculates the value for
     experiments (the variation is set with SD). Data here has two levels of
@@ -18,18 +18,18 @@ def generate_data(true_value:float, inter_day_SD:float, intra_day_SD:float, \
     OUTPUT: data - matrix of data (0 axis is experimental values per cluster;
     1 axis is clusters) """
     # generate matrix with clusters and experiments per cluster
-    data = true_value + inter_day_SD*np.random.randn(1,N_clusters) + \
-           intra_day_SD*np.random.randn(N_per_cluster,N_clusters)
+    data = true_value + inter_cluster_SD*np.random.randn(1,N_clusters) + \
+           intra_cluster_SD*np.random.randn(N_per_cluster,N_clusters)
     return data
 
 
 
-def adj_ttest(N_per_cluster:int, N_clusters:int, inter_day_SD:float, \
-              intra_day_SD:float, data_exp_pooled:list, \
+def adj_ttest(N_per_cluster:int, N_clusters:int, inter_cluster_SD:float, \
+              intra_cluster_SD:float, data_exp_pooled:list, \
               data_control_pooled:list):
     N = N_per_cluster*N_clusters # the total number of experiments
     # calculate intraclass correlation calculation:
-    ICC = inter_day_SD**2/(inter_day_SD**2 + intra_day_SD**2);
+    ICC = inter_cluster_SD**2/(inter_cluster_SD**2 + intra_cluster_SD**2);
 
     #item1 = (N_per_cluster - 1)*ICC
     #item2 = (N - 2) - 2*item1
@@ -59,7 +59,7 @@ def adj_ttest(N_per_cluster:int, N_clusters:int, inter_day_SD:float, \
 
 
 def process_data(data_exp, data_control, N_per_cluster, N_clusters, \
-                 inter_day_SD, intra_day_SD, data_method, ttest_method):
+                 inter_cluster_SD, intra_cluster_SD, data_method, ttest_method):
     """ This is the function to process data
     There are several types of processing
     By default it is use simple t-test on pooled data (ignore clustering)
@@ -81,8 +81,8 @@ def process_data(data_exp, data_control, N_per_cluster, N_clusters, \
             # use simple t-test
             t, p_value = ttest(data_exp_pooled, data_control_pooled)
         elif ttest_method == 'adjusted': # use adjusted t-test
-            t, p_value = adj_ttest(N_per_cluster, N_clusters, inter_day_SD, \
-            intra_day_SD, data_exp_pooled, data_control_pooled)
+            t, p_value = adj_ttest(N_per_cluster, N_clusters, inter_cluster_SD, \
+            intra_cluster_SD, data_exp_pooled, data_control_pooled)
         else:
             print('insert correct t-test method')
     elif data_method == 'cluster':# use means of clusters for processing
@@ -103,7 +103,7 @@ def process_data(data_exp, data_control, N_per_cluster, N_clusters, \
 
 
 def experiment(true_exp_value:float, true_control_value:float, \
-               inter_day_SD:float, intra_day_SD:float, N_clusters:int, \
+               inter_cluster_SD:float, intra_cluster_SD:float, N_clusters:int, \
                N_per_cluster:int, data_method:str = 'pool', \
                ttest_method:str = 'simple'):
     """ This module generates data and asks another module for processing
@@ -120,13 +120,13 @@ def experiment(true_exp_value:float, true_control_value:float, \
     EXAMPLE_OF_USE: experiment(1, 1, 0.1, 0.2, 3, 5)
                     experiment(1, 1, 0.1, 0.2, 3, 5, 'cluster', 'adjusted') """
     # generate 2 matrices of data (control and experiment)
-    data_exp = generate_data(true_exp_value, inter_day_SD, intra_day_SD, \
+    data_exp = generate_data(true_exp_value, inter_cluster_SD, intra_cluster_SD, \
                              N_clusters, N_per_cluster)
-    data_control = generate_data(true_control_value, inter_day_SD, \
-                                 intra_day_SD, N_clusters, N_per_cluster)
+    data_control = generate_data(true_control_value, inter_cluster_SD, \
+                                 intra_cluster_SD, N_clusters, N_per_cluster)
     # do the processing
     p_value = process_data(data_exp, data_control, N_per_cluster, \
-                                N_clusters, inter_day_SD, intra_day_SD, \
+                                N_clusters, inter_cluster_SD, intra_cluster_SD, \
                                 data_method, ttest_method)
     return p_value
 
@@ -135,7 +135,7 @@ def experiment(true_exp_value:float, true_control_value:float, \
 
 
 def error_probability(NN:int, true_exp_value:float, true_control_value:float, \
-                      inter_day_SD:float, intra_day_SD:float, N_clusters:int, \
+                      inter_cluster_SD:float, intra_cluster_SD:float, N_clusters:int, \
                       N_per_cluster:int, data_method:str='pool', \
                       ttest_method:str='simple'):
     """ There are two types of errors: 1) False positive 2) False negative
@@ -155,8 +155,8 @@ def error_probability(NN:int, true_exp_value:float, true_control_value:float, \
     # do NN experiments and see how many times we have an error
     N_error = 0
     for i in range(NN):
-        p_value = experiment(true_exp_value, true_control_value, inter_day_SD,\
-                             intra_day_SD, N_clusters, N_per_cluster, \
+        p_value = experiment(true_exp_value, true_control_value, inter_cluster_SD,\
+                             intra_cluster_SD, N_clusters, N_per_cluster, \
                              data_method, ttest_method)
         if s*p_value < s*0.05 :
             N_error += 1
@@ -167,8 +167,8 @@ def error_probability(NN:int, true_exp_value:float, true_control_value:float, \
 
 def error_probability_heatmap(MAX_N_clusters:int, MAX_N_per_cluster:int, \
                               NN:int, true_exp_value:float, \
-                              true_control_value:float, inter_day_SD:float, \
-                              intra_day_SD:float, data_method:str='pool', \
+                              true_control_value:float, inter_cluster_SD:float, \
+                              intra_cluster_SD:float, data_method:str='pool', \
                               ttest_method:str='simple'):
     """ Heatmap will show the error probability for an experimentator's choise
     of number of clusters and number of measurements per cluster
@@ -186,7 +186,7 @@ def error_probability_heatmap(MAX_N_clusters:int, MAX_N_per_cluster:int, \
     for i, n_clusters in enumerate(CLUSTERS):
         for j, n_per_cluster in enumerate(PER_CLUSTER):
             probability[i, j] = error_probability(NN,true_exp_value, \
-            true_control_value, inter_day_SD, intra_day_SD, n_clusters, \
+            true_control_value, inter_cluster_SD, intra_cluster_SD, n_clusters, \
             n_per_cluster, data_method, ttest_method)
     return probability
 
@@ -195,7 +195,7 @@ def error_probability_heatmap(MAX_N_clusters:int, MAX_N_per_cluster:int, \
 
 def error_probability_ICC(NN:int, true_exp_value:float, \
                           true_control_value:float, \
-                          intra_day_SD:float, N_clusters:int, \
+                          intra_cluster_SD:float, N_clusters:int, \
                           N_per_cluster:int, ICC, \
                           data_method:str='pool', ttest_method:str='simple'):
     """ Let's calculate the probability of erroneus result in dependence of ICC
@@ -207,13 +207,13 @@ def error_probability_ICC(NN:int, true_exp_value:float, \
 
     OUTPUT: a list of error probability for different ICC & ICC """
 
-    inter_day_SDs = np.sqrt(ICC*(intra_day_SD**2)/(1-ICC))
+    inter_cluster_SDs = np.sqrt(ICC*(intra_cluster_SD**2)/(1-ICC))
 
     probability = np.zeros((len(ICC)))
     for i in range(len(ICC)):
         probability[i] = error_probability(NN, true_exp_value, \
-                                           true_control_value, inter_day_SDs[i],\
-                                           intra_day_SD, N_clusters, \
+                                           true_control_value, inter_cluster_SDs[i],\
+                                           intra_cluster_SD, N_clusters, \
                                            N_per_cluster, data_method,\
                                            ttest_method)
     return probability
