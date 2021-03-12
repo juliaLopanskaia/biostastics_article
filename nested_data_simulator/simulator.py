@@ -102,7 +102,7 @@ def experiment(true_exp_value:float, true_control_value:float, \
 
     EXAMPLE_OF_USE: experiment(1, 1, 0.1, 0.2, 3, 5)
                     experiment(1, 1, 0.1, 0.2, 3, 5, 'cluster', 'adjusted') """
-    # generate a matrix of data
+    # generate 2 matrices of data (control and experiment)
     data_exp = generate_data(true_exp_value, inter_day_SD, intra_day_SD, \
                              N_clusters, N_per_cluster)
     data_control = generate_data(true_control_value, inter_day_SD, intra_day_SD,\
@@ -114,7 +114,7 @@ def experiment(true_exp_value:float, true_control_value:float, \
     # visualize data
     #if show_figure:
         #display_data(data_exp, data_control, N_clusters, N_per_cluster)
-    return p_value, data_exp, data_control
+    return p_value
 
 
 
