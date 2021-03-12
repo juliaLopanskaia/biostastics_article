@@ -7,6 +7,6 @@ Or use run.py and parameters.py to run python3. <br />
 Script run.py has a list of examples use of the code.
 The parameters.py has a description of all parameters used 
 <br/>
-For more information read [Methods](https://github.com/juliaLopanskaia/biostastics_article/blob/master/docs/methods.md) and [Introduction & Parameters](https://github.com/juliaLopanskaia/biostastics_article/blob/master/docs/intro_parameters.md)
+For more information read [Methods](https://github.com/juliaLopanskaia/nested_data_simulator/blob/master/docs/methods.md) and [Introduction & Parameters](https://github.com/juliaLopanskaia/nested_data_simulator/blob/master/docs/intro_parameters.md)
 
 

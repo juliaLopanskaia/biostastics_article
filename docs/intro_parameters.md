@@ -14,4 +14,4 @@ We designed a simple data simulator that helps an experimenter quickly generate 
 	* p-values calculation based on clusters 
 	* adjusted p-values calculation 
 		
-For more information read [Methods](https://github.com/juliaLopanskaia/biostastics_article/blob/master/docs/methods.md)
+For more information read [Methods](https://github.com/juliaLopanskaia/nested_data_simulator/blob/master/docs/methods.md)

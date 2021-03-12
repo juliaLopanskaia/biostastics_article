@@ -4,4 +4,4 @@
 ![picture_methods2.png](../images/picture_methods2.png)
 <br/>
 <br/><br/><br/>
-**See [Tutorial](https://github.com/juliaLopanskaia/biostastics_article/blob/master/docs/tutorial.md) further**
+**See [Tutorial](https://github.com/juliaLopanskaia/nested_data_simulator/blob/master/docs/tutorial.md) further**
