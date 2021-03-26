@@ -229,57 +229,70 @@ def standard_deviation(data_exp,data_control):
     OUTPUT: inter cluster SD, intra cluster SD
     """
     inter_cluster_SD = data_exp.mean(axis=1).std(ddof=1)
-    data_std = data_exp.std(axis=0, ddof=1)
+    data_std = data_exp.std(axis=1, ddof=1)
     intra_cluster_SD = np.sqrt((data_std**2).sum()/(len(data_exp)))
     return inter_cluster_SD, intra_cluster_SD
 
 
 
 
-def analyze(data_exp, data_control, forecast_error=True, NN=1000, \
-	    plus_number_cluster=1):
+def analyze(data_exp, data_control, forecast_error=False, NN=1000, plus_number_cluster=1):
     """
-    Analyze your data and print value: Means, standart deviation and p value
-    Display data with Superplot
+    Analyze your data and print value: Means, standart deviation and p value adjusted
+    Display data Superplot
     Forecast probability of false negative error if your mean and SD are true
     INPUT:  experimental data (matrix) & control data (matrix)
-            forecast_error : bool - optional - do you want to calculate the forecast 
-            error probability?
-            NN - optional - number of trials to calculate the probability
-            plus_number_cluster - step of increasing the number of clusters in the 
-            forecast error
-    OUTPUT: None (it prints out the analysis)
+            forecast_error : bool - Do the forecast probability of false negative error?
+            NN - number of trials to calculate the probability
+            plus_number_cluster - step of increasing the number of clusters in the forecast error
+    OUTPUT: None
+                    
     """
     inter_cluster_SD, intra_cluster_SD = standard_deviation(data_exp, data_control)
-
-    print('Experiment mean = ', round(data_exp.mean(), 3))
-    print('Control mean = ', round(data_control.mean(), 3))
+    
+    print('Mean experimetal = ', round(data_exp.mean(),3))
+    print('Mean control = ', round(data_control.mean(), 3))
+    print()
     print('inter cluster SD =', round(inter_cluster_SD, 3))
     print('intra cluster SD =', round(intra_cluster_SD, 3))
+    ICC = icc_calculator(data_exp, data_control)
+    print('ICC = ', round(ICC, 3))
     print('\n')
-    p_value = process_data(data_exp, data_control, inter_cluster_SD, \
-    	                   intra_cluster_SD, N_clusters=(len(data_exp)), \
-                          N_per_cluster=len(data_exp[0]), data_method='pool', \
-                          ttest_method='adjusted')
-    print('p value adjusted = ', round(p_value, 3))
+    p_value = process_data(data_exp, data_control,  \
+                          inter_cluster_SD=inter_cluster_SD, intra_cluster_SD=intra_cluster_SD,\
+                          data_method='pool', ttest_method='adjusted')
+    print('p value adjusted = ', round(p_value,3))
+    if p_value < 0.05:
+        print('Reject the null hypothesis of equality of means with a significance level of 0.05')
+    else:
+        print('There is no reason to reject the null hypothesis of equality of means with a significance '\
+              'level of 0.05')
+                                
     print('\n')
     pb_err = error_probability(NN=NN, true_exp_value=data_exp.mean(), true_control_value=data_control.mean(), \
                           inter_cluster_SD=inter_cluster_SD, intra_cluster_SD=intra_cluster_SD,\
                             N_clusters=len(data_exp), \
                           N_per_cluster=len(data_exp[0]), data_method='pool', \
                           ttest_method='adjusted')
-    print('If your mean and SD are true: ')
-    print('Probability of false negative error is', pb_err)
+
+    print('Let\'s analyze the result')
+    print('In order to simulate more experiments based on parameters from your data,\nwe have ',\
+          'to assume that the measured parameters are true (as they appear to be in nature).')
+    print('So, for now we have simulated N =',NN,'experiments and the probability of false negative error is', pb_err)
+    
     if forecast_error :
         k = plus_number_cluster
         while pb_err > 0.2:
-            pb_err = error_probability(NN=NN, true_exp_value=data_exp.mean(), true_control_value=data_control.mean(), \
-                              inter_cluster_SD=inter_cluster_SD, intra_cluster_SD=intra_cluster_SD,\
-                                N_clusters=(k + len(data_exp)), \
-                              N_per_cluster=len(data_exp[0]), data_method='pool', \
-                              ttest_method='adjusted')
-            print('If there are ', k + len(data_exp), ' clusters, the false negative error will be' , pb_err)
+            pb_err = error_probability(NN=NN, true_exp_value=data_exp.mean(), \
+                                       true_control_value=data_control.mean(), \
+                                       inter_cluster_SD=inter_cluster_SD, \
+                                       intra_cluster_SD=intra_cluster_SD,\
+                                       N_clusters=(k + len(data_exp)), \
+                                       N_per_cluster=len(data_exp[0]), data_method='pool', \
+                                       ttest_method='adjusted')
+            print('If there were ', k + len(data_exp), ' clusters, the false negative error would be' , pb_err)
             k += plus_number_cluster
+            
     pb_err = error_probability(NN=NN, true_exp_value=(data_exp.mean()+data_control.mean())/2, \
                                true_control_value=(data_exp.mean()+data_control.mean())/2, \
                           inter_cluster_SD=inter_cluster_SD, intra_cluster_SD=intra_cluster_SD,\
@@ -287,7 +300,20 @@ def analyze(data_exp, data_control, forecast_error=True, NN=1000, \
                           N_per_cluster=len(data_exp[0]), data_method='pool', \
                           ttest_method='adjusted')
     print('\n')
-    print('If your SD are true and \n mean_exp = mean_control = (mean_exp + mean_control)/2 = ', \
+    print('What if the means that you obtained are not true? This can hypothetically '\
+          'be the false positive result.')
+    print('Let\'s assume that your SD are true and the means of control and experiment are not. '\
+          '\nThe means will be equal to (mean_exp+ mean_control)/2 =', \
           round((data_exp.mean()+data_control.mean())/2 ,3))
-    print('Probability of false positive error is', pb_err)
 
+    print('So, the probability of false positive error is', pb_err)
+
+
+
+
+def icc_calculator(data_exp,data_control):
+    
+    inter_cluster_SD, intra_cluster_SD = standard_deviation(data_exp, data_control)
+    ICC = inter_cluster_SD**2/(inter_cluster_SD**2 + intra_cluster_SD**2)
+    
+    return ICC 

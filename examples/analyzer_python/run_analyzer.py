@@ -1,5 +1,5 @@
 import sys
-sys.path.insert(0, '..') # find package in the previous directory
+sys.path.insert(0, '../..') # find package in the previous directory
 from nested_data_simulator import *
 from parameters import *
 
