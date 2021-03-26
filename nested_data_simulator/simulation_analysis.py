@@ -1,7 +1,10 @@
 import numpy as np
 from scipy.stats import ttest_ind as ttest
 from scipy.stats import t as tpdf
+import scipy
 from math import *
+import seaborn as sns
+
 
 
 
@@ -18,9 +21,10 @@ def generate_data(true_value:float, inter_cluster_SD:float, intra_cluster_SD:flo
     OUTPUT: data - matrix of data (0 axis is experimental values per cluster;
     1 axis is clusters) """
     # generate matrix with clusters and experiments per cluster
-    data = true_value + inter_cluster_SD*np.random.randn(1,N_clusters) + \
-           intra_cluster_SD*np.random.randn(N_per_cluster,N_clusters)
+    data = true_value + inter_cluster_SD*np.random.randn(1,N_per_cluster) + \
+           intra_cluster_SD*np.random.randn(N_clusters,N_per_cluster)
     return data
+
 
 
 
@@ -31,24 +35,24 @@ def adj_ttest(N_per_cluster:int, N_clusters:int, inter_cluster_SD:float, \
     # calculate intraclass correlation calculation:
     ICC = inter_cluster_SD**2/(inter_cluster_SD**2 + intra_cluster_SD**2);
 
-    #item1 = (N_per_cluster - 1)*ICC
-    #item2 = (N - 2) - 2*item1
-    #item3 = (N - 2)*(1 + item1)
-    #c = sqrt(item2/item3) # correction factor for t-distribution
-    c=np.sqrt(((N-2)-2*(N_per_cluster-1)*ICC)/((N-2)*(1+(N_per_cluster-1)*ICC)))
+    item1 = (N_per_cluster - 1)*ICC
+    item2 = (N - 2) - 2*item1
+    item3 = (N - 2)*(1 + item1)
+    c = np.sqrt(item2/item3) # correction factor for t-distribution
 
-    #item4 = N-2*N_per_cluster
-    #item5 = (N-2)*(1-ICC)**2
-    #item6 = N_per_cluster*item4*ICC**2
-    #item7 = 2*item4*ICC*(1 - ICC)
-    #h = item2**2/(item5 + item6 + item7) # corrected degrees of freedom
-    h = ((N-2)-2*(N_per_cluster-1)*ICC)**2/((N-2)*(1-ICC)**2 + N_per_cluster*(N-2*N_per_cluster)*(ICC**2)+2*(N-2*N_per_cluster)*ICC*(1-ICC))
+    item4 = N-2*N_per_cluster
+    item5 = (N-2)*(1-ICC)**2
+    item6 = N_per_cluster*item4*ICC**2
+    item7 = 2*item4*ICC*(1 - ICC)
+    h = item2**2/(item5 + item6 + item7) # corrected degrees of freedom
 
+    # standard deviation of two datasets:
     s=np.sqrt((N*data_exp_pooled.std()**2+N*data_control_pooled.std()**2)/(2*N-2))
-    #s = sqrt(((N-1)*np.std(data_exp_pooled)**2+(N-1)*np.std(data_control_pooled)**2)/(2*N-2)) # standard deviation of two datasets
-    t = abs(np.mean(data_exp_pooled) - np.mean(data_control_pooled))/(s*np.sqrt(1/N + 1/N)) # t-test
+
+    # t-test
+    t = abs(np.mean(data_exp_pooled) - np.mean(data_control_pooled))/(s*np.sqrt(1/N + 1/N)) 
     ta = c*t # corrected t-test
-    #p_value = 2*sum(tpdf.pdf(np.arange(ta,100,0.001),h)*0.001) # p-value = integral of t-distribution probability function
+    # p-value = integral of t-distribution probability function:
     p_value = 2*(1-tpdf.cdf(ta, h))
     #print('P-value based on t-distribution probability function is {:2.2f}'.format(p_value))
     return ta, p_value
@@ -56,10 +60,8 @@ def adj_ttest(N_per_cluster:int, N_clusters:int, inter_cluster_SD:float, \
 
 
 
-
-
-def process_data(data_exp, data_control, N_per_cluster, N_clusters, \
-                 inter_cluster_SD, intra_cluster_SD, data_method, ttest_method):
+def process_data(data_exp, data_control, inter_cluster_SD, intra_cluster_SD,\
+		  data_method, ttest_method):
     """ This is the function to process data
     There are several types of processing
     By default it is use simple t-test on pooled data (ignore clustering)
@@ -71,7 +73,8 @@ def process_data(data_exp, data_control, N_per_cluster, N_clusters, \
             3) ttest_method = {'simple', 'adjusted'}, optional
                choose what type of ttest to apply For more information read methods.md
      """
-
+    N_clusters = len(data_exp)
+    N_per_cluster = len(data_exp[0])
     if data_method == 'pool': # use pooled data for processing
         # pool the data into a list:
         data_exp_pooled = data_exp.reshape(-1)
@@ -86,8 +89,8 @@ def process_data(data_exp, data_control, N_per_cluster, N_clusters, \
         else:
             print('insert correct t-test method')
     elif data_method == 'cluster':# use means of clusters for processing
-        data_exp_mean = data_exp.mean(axis=0)
-        data_control_mean = data_control.mean(axis=0)
+        data_exp_mean = data_exp.mean(axis=1)
+        data_control_mean = data_control.mean(axis=1)
         if ttest_method == 'simple':
             t, p_value = ttest(data_exp_mean, data_control_mean)
         elif ttest_method == 'adjusted':
@@ -95,9 +98,8 @@ def process_data(data_exp, data_control, N_per_cluster, N_clusters, \
             return
         else:
             print('insert correct t-test method')
+    else: print('what kind of data_method do you use?')
     return p_value
-
-
 
 
 
@@ -125,11 +127,9 @@ def experiment(true_exp_value:float, true_control_value:float, \
     data_control = generate_data(true_control_value, inter_cluster_SD, \
                                  intra_cluster_SD, N_clusters, N_per_cluster)
     # do the processing
-    p_value = process_data(data_exp, data_control, N_per_cluster, \
-                                N_clusters, inter_cluster_SD, intra_cluster_SD, \
-                                data_method, ttest_method)
+    p_value = process_data(data_exp, data_control, inter_cluster_SD, intra_cluster_SD,\
+                           data_method, ttest_method)
     return p_value
-
 
 
 
@@ -217,3 +217,77 @@ def error_probability_ICC(NN:int, true_exp_value:float, \
                                            N_per_cluster, data_method,\
                                            ttest_method)
     return probability
+    
+    
+
+    
+def standard_deviation(data_exp,data_control):
+    """
+    Calculate the standard deviation inter cluster and intra cluster 
+    based on experimental data
+    INPUT: experimental data (matrix) & control data (matrix)
+    OUTPUT: inter cluster SD, intra cluster SD
+    """
+    inter_cluster_SD = data_exp.mean(axis=1).std(ddof=1)
+    data_std = data_exp.std(axis=0, ddof=1)
+    intra_cluster_SD = np.sqrt((data_std**2).sum()/(len(data_exp)))
+    return inter_cluster_SD, intra_cluster_SD
+
+
+
+
+def analyze(data_exp, data_control, forecast_error=True, NN=1000, \
+	    plus_number_cluster=1):
+    """
+    Analyze your data and print value: Means, standart deviation and p value
+    Display data with Superplot
+    Forecast probability of false negative error if your mean and SD are true
+    INPUT:  experimental data (matrix) & control data (matrix)
+            forecast_error : bool - optional - do you want to calculate the forecast 
+            error probability?
+            NN - optional - number of trials to calculate the probability
+            plus_number_cluster - step of increasing the number of clusters in the 
+            forecast error
+    OUTPUT: None (it prints out the analysis)
+    """
+    inter_cluster_SD, intra_cluster_SD = standard_deviation(data_exp, data_control)
+
+    print('Experiment mean = ', round(data_exp.mean(), 3))
+    print('Control mean = ', round(data_control.mean(), 3))
+    print('inter cluster SD =', round(inter_cluster_SD, 3))
+    print('intra cluster SD =', round(intra_cluster_SD, 3))
+    print('\n')
+    p_value = process_data(data_exp, data_control, inter_cluster_SD, \
+    	                   intra_cluster_SD, N_clusters=(len(data_exp)), \
+                          N_per_cluster=len(data_exp[0]), data_method='pool', \
+                          ttest_method='adjusted')
+    print('p value adjusted = ', round(p_value, 3))
+    print('\n')
+    pb_err = error_probability(NN=NN, true_exp_value=data_exp.mean(), true_control_value=data_control.mean(), \
+                          inter_cluster_SD=inter_cluster_SD, intra_cluster_SD=intra_cluster_SD,\
+                            N_clusters=len(data_exp), \
+                          N_per_cluster=len(data_exp[0]), data_method='pool', \
+                          ttest_method='adjusted')
+    print('If your mean and SD are true: ')
+    print('Probability of false negative error is', pb_err)
+    if forecast_error :
+        k = plus_number_cluster
+        while pb_err > 0.2:
+            pb_err = error_probability(NN=NN, true_exp_value=data_exp.mean(), true_control_value=data_control.mean(), \
+                              inter_cluster_SD=inter_cluster_SD, intra_cluster_SD=intra_cluster_SD,\
+                                N_clusters=(k + len(data_exp)), \
+                              N_per_cluster=len(data_exp[0]), data_method='pool', \
+                              ttest_method='adjusted')
+            print('If there are ', k + len(data_exp), ' clusters, the false negative error will be' , pb_err)
+            k += plus_number_cluster
+    pb_err = error_probability(NN=NN, true_exp_value=(data_exp.mean()+data_control.mean())/2, \
+                               true_control_value=(data_exp.mean()+data_control.mean())/2, \
+                          inter_cluster_SD=inter_cluster_SD, intra_cluster_SD=intra_cluster_SD,\
+                            N_clusters=len(data_exp), \
+                          N_per_cluster=len(data_exp[0]), data_method='pool', \
+                          ttest_method='adjusted')
+    print('\n')
+    print('If your SD are true and \n mean_exp = mean_control = (mean_exp + mean_control)/2 = ', \
+          round((data_exp.mean()+data_control.mean())/2 ,3))
+    print('Probability of false positive error is', pb_err)
+

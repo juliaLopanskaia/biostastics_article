@@ -1,6 +1,6 @@
 import numpy as np
 
-N_clusters = 3 # number of clusters
+N_clusters = 6 # number of clusters
 N_per_cluster = 10 # number of experiments per cluster
 
 
@@ -15,7 +15,7 @@ inter_cluster_SD = 0.15 # the inter day data varience
 
 
 data_method = 'pool' # either 'pool' or 'cluster'
-ttest_method = 'simple' # either 'simple' or 'adjusted'
+ttest_method = 'adjusted' # either 'simple' or 'adjusted'
 
 
 NN = 100 # the number of experiments to conduct (for error probability \
