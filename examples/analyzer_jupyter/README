@@ -1,0 +1,5 @@
+1) Put your experimental and control data to this folder (line is cluster's measured values - see example experiment.txt and control.txt - they have 3 clusters with 5 measurements per cluster) 
+2) Open run_simulator.ipynb with jupyter-notebook 
+3) Run every line in the code from the beginninig and see what it does
+
+Note: in case of using website jupyter run examples.ipynb with prelimenary uploaded file code.ipynb (on the left of site - FILES button)

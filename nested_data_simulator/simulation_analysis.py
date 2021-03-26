@@ -8,6 +8,16 @@ import seaborn as sns
 
 
 
+def read_file(file:str):
+    matrix = []
+    with open(file, 'r') as f:
+        m = [[float(num) for num in line.split()] for line in f]
+    matrix = np.array(m)
+    return matrix
+
+
+
+
 def generate_data(true_value:float, inter_cluster_SD:float, intra_cluster_SD:float, \
                   N_clusters:int, N_per_cluster:int):
     """ This function generates data. It randomly calculates the value for
@@ -236,7 +246,7 @@ def standard_deviation(data_exp,data_control):
 
 
 
-def analyze(data_exp, data_control, forecast_error=False, NN=1000, plus_number_cluster=1):
+def analyze(data_exp, data_control, forecast_error=True, NN=1000, plus_number_cluster=1):
     """
     Analyze your data and print value: Means, standart deviation and p value adjusted
     Display data Superplot

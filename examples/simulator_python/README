@@ -1,0 +1,2 @@
+1) Set parameters of data you wish to obtain in parameters.py (the description is inside)
+2) Do in terminal: python3 run_simulator.py

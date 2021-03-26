@@ -1,3 +1,5 @@
 Open run_simulator.ipynb with jupyter-notebook 
 Run every line in the code from the beginninig and see what it does
 Change function parameters as you wish to see different pictures and get an idea of they influence an experimental result
+
+Note: in case of using website jupyter run examples.ipynb with prelimenary uploaded file code.ipynb (on the left of site - FILES button)
