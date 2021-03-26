@@ -7,7 +7,8 @@
 <img src="../images/picture_tutorial.png" alt="drawing" width="800"/>
 <br/>
 <br/>
-**Note:** in case of troubles with Jupyter Notebook installation use online server: 
+**Note:**
+in case of troubles with Jupyter Notebook installation use online server: 
 https://colab.research.google.com/notebooks/intro.ipynb 
 
 
