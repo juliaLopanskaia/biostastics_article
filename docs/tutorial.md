@@ -4,7 +4,7 @@
 2. Go to /examples directory
 3. Choose a folder based on your goal and soft you want to use (see README file inside the folder for additional descriptions)
 
-<img src="../images/picture_tutorial.png" alt="drawing" width="1000"/>
+<img src="../images/picture_tutorial.png" alt="drawing" width="800"/>
 <br/>
 <br/>
 **Note:** in case of troubles with Jupyter Notebook installation use online server: 
