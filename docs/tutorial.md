@@ -2,12 +2,12 @@
 
 1. Download the repository
 2. Go to /examples directory
-3. Choose a folder based on your goal and see README file inside one for additional descriptions
+3. Choose a folder based on your goal and soft you want to use (see README file inside the folder for additional descriptions)
 
-![picture_tutorial.png](../images/picture_tutorial.png)
+![picture_tutorial.png](../images/picture_tutorial.png) {:height="36px" width="36px"}
 <br/>
 <br/>
-**Note:** in case of troubles with Jupyter Notebook installation use online server: <br/>
+**Note:** in case of troubles with Jupyter Notebook installation use online server: 
 https://colab.research.google.com/notebooks/intro.ipynb 
 
 
