@@ -1,4 +1,4 @@
-# experiment_simulator.py
+# nested_data_simulator.py
 This is a simple nested data simulator. It generates two-level experimental data and processes it. The user can test various scenarios, appreciate the importance of using correct multi-level analysis and the danger of neglecting the information about the data structure. Please, feel free to use it in case you aim to vizualize and understand how false positives and false negatives can occur. This simple tool also helps an experimenter correctly set up an optimal experiment in order to achieve required statistical power. 
 
 | ![picture_readme.png](/images/picture_readme.png) | 
