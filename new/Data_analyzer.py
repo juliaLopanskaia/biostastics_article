@@ -59,7 +59,6 @@ data_control = np.array([
 
 
 analyze(data_exp, data_control)
-print('afafasfas')
 
 
 
