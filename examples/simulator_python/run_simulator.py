@@ -6,13 +6,13 @@ from parameters import *
 
 
 
-# GENERATE DATA 
+# GENERATE DATA
 data_exp = generate_data(true_exp_value, inter_cluster_SD, intra_cluster_SD, \
                              N_clusters, N_per_cluster)
 data_control = generate_data(true_control_value, inter_cluster_SD, intra_cluster_SD,\
                                  N_clusters, N_per_cluster)
 # DISPLAY DATA with Superplot
-display_data_Superplot(data_exp, data_control) 
+superplot(data_exp, data_control)
 
 
 

@@ -1,2 +1,4 @@
-1) Put your experimental and control data to this folder (line is cluster's measured values - see example experiment.txt and control.txt - they have 3 clusters with 5 measurements per cluster) 
-2) Do in terminal: python3 run_analyzer.py
+1) Put your experimental and control data to this folder (txt or csv format).
+   (the files should contain lines with cluster's measured values.
+   See examples experiment.txt and control.txt)
+2) Run python from terminal: python3 run_analyzer.py

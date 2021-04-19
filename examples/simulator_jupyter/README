@@ -1,5 +1,19 @@
-Open run_simulator.ipynb with jupyter-notebook 
-Run every line in the code from the beginninig and see what it does
-Change function parameters as you wish to see different pictures and get an idea of they influence an experimental result
+1) Put your experimental and control data to this folder (txt or csv format). 
+   (the files should contain lines with cluster's measured values. 
+   See examples experiment.txt and control.txt) 
+2) Open run_simulator.ipynb with jupyter-notebook 
+3) Run every line in the code from the beginninig and see what it does
+   Change function parameters as you wish to see different pictures and get an idea 
+   of they influence an experimental result
 
-Note: in case of using website jupyter run examples.ipynb with prelimenary uploaded file code.ipynb (on the left of site - FILES button)
+Note: 1) You may have to write your file paths in the program.
+      2) In case of using website jupyter run examples.ipynb with prelimenary 
+         uploaded file code.ipynb (on the left of the page - FILES button)
+      3) If you want to install Jupiter Notebook:
+         1. https://colab.research.google.com/notebooks/intro.ipynb
+         2. Upload notebook /new/code.ipynb via github. 
+            Use URL:  https://github.com/juliaLopanskaia/nested_data_simulator.git
+         3. Download this notebook.
+         4. Upload notebook /new/data_analyzer.ipynb or /new/examples.ipynb via github. 
+            Use URL:  https://github.com/juliaLopanskaia/nested_data_simulator.git
+
