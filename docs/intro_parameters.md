@@ -16,6 +16,6 @@ For the task of data generation the user should explicitly enter the parameters 
 	* p-values calculation based on clusters
 	* adjusted p-values calculation
 
- If the user wants to simply analyze one's data there is no need to know the parameters beforehand (it is automatically calculated). Due to the fact that in our article we proved that in any scenario an experimenter should use adjusted t-test, the analyzer use this processing method and does not ask a user about it. However it easily can be changed if one wants to and knows python.
+ If the user wants to simply analyze one's data there is no need to know the parameters beforehand (it is automatically calculated). Due to the fact that in our article we proved that in any scenario an experimenter should use adjusted t-test, the analyzer use this processing method and does not ask the user about it. However it easily can be changed if one wants to and knows python.
 
 For more information read [Methods](https://github.com/juliaLopanskaia/nested_data_simulator/blob/master/docs/methods.md)
