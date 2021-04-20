@@ -4,8 +4,6 @@ Biological experiments often include data with intrinsic hierachy. For example, 
 Here we present a tool that can generate two-level experimental data and processes it. It also can analyze input data to test whether the result is reliable. Both processes rely on data parameters that we state here and on methods described in the next chapter ([Methods](https://github.com/juliaLopanskaia/nested_data_simulator/blob/master/docs/methods.md)).
 
 For the task of data generation the user should explicitly enter the parameters to the program. This data simulator helps an experimenter quickly generate data and learn how the outcomes of data analysis depend on the intrinsic data features (1 block of parameters), on the construction of the experiment (2 block of parameters) and on the ways in which the data are processed (3 block of parameters).
-
-There are several parameters in this code:
 * **intrinsic data features**
 	* true values of measurements
 	* the variance of inter-cluster data (cluster-to-cluster variance)
