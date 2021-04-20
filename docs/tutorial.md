@@ -8,7 +8,6 @@
 <br/>
 <br/>
 <strong>Note:</strong>
-in case of troubles with Jupyter Notebook installation use online server: 
-https://colab.research.google.com/notebooks/intro.ipynb 
-
-
+in case of troubles with Jupyter Notebook installation use online server:
+https://colab.research.google.com/notebooks/intro.ipynb <br/>
+There is more additional information on how to install Jupyter-Notebook in the mentioned README files

@@ -1,7 +1,7 @@
 # nested_data_simulator.py
-This is a simple nested data simulator. It generates two-level experimental data and processes it. The user can analyze one's data: test various scenarios, appreciate the importance of using correct multi-level analysis and the danger of neglecting the information about the data structure. Please, feel free to use it in case you aim to vizualize and understand how false positives and false negatives can occur and if you wish to understand how to improve your experiment workflow based on data. This simple tool also helps an experimenter correctly set up an optimal experiment in order to achieve required statistical power.
+This is a simple nested data simulator. It generates two-level experimental data and processes it. It also can analyze input data to test whether the result is reliable. The user can analyze one's data: test various scenarios, appreciate the importance of using correct multi-level analysis and the danger of neglecting the information about the data structure. Please, feel free to use it in case you aim to vizualize and understand how false positives and false negatives can occur and if you wish to understand how to improve your experiment workflow based on data. This simple tool also helps an experimenter correctly set up an optimal experiment in order to achieve required statistical power.
 
-| ![picture_readme.png](/images/picture_readme.png) | 
+| ![picture_readme.png](/images/picture_readme.png) |
 |:--:|
 | *Imagine that the 'true' values of 'control' and 'experiment' are equal. The example case on the left has a weak intra-cluster correlation (ICC) and the example case on the right has a strong ICC. Ignoring data clustering in the right case leads to a false positive result. However, proper processing of data could save the day (see p(per-cluster) or p(adjusted)).* |
 
